@@ -1173,14 +1173,21 @@ function aiDecisionOffer(){
     state.aiHand.push(card);
     state.discardsNeeded = 1;
 
-    setMsg('AI took the upcard!');
-    animateCardFly($('discardStack'), $('opponentHandRow'), null, ()=>{
-      state.phase = 'discard';
-      state.turn = 'ai';
-      state.busy = false;
-      render();
-      updateTurnInstruction();
-    }, true);
+    setMsg('AI took the upcard: ' + card.rank + card.suit + '!');
+    
+    // Slight initial delay before flying so you can visually see the upcard taking place
+    later(() => {
+      animateCardFly($('discardStack'), $('opponentHandRow'), null, ()=>{
+        // Pause briefly after animation completes before advancing turn
+        later(() => {
+          state.phase = 'discard';
+          state.turn = 'ai';
+          state.busy = false;
+          render();
+          updateTurnInstruction();
+        }, 800);
+      }, true);
+    }, 600);
   } else {
     setMsg('AI passed on the upcard.');
     if(state.offerStage === 'nondealer'){
