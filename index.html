@@ -177,13 +177,9 @@
       Straight Gin
       <span class="sub">No knock. Must meld all 10 cards.</span>
     </div>
-    <div class="gtype-card" data-gtype="nineCard">
-      Nine Card Gin
-      <span class="sub">No Aces or Kings. Must meld all 9 cards.</span>
-    </div>
-    <div class="gtype-card" data-gtype="nineCardDraw2">
-      9 Card Draw 2
-      <span class="sub">No A/K. Pick top 2 discards or draw 2.</span>
+    <div class="gtype-card" data-gtype="duoGin">
+      Duo Gin
+      <span class="sub">Pick top 2 discards or draw 2.</span>
     </div>
   </div>
   <button class="start-btn secondary" id="startSettingsBtn">&#9881;&#xFE0E; Settings</button>
@@ -239,13 +235,22 @@
 <div class="settings-panel hidden" id="settingsPanel">
   <h2>Settings</h2>
 
+  <h3>Deck</h3>
+  <div class="setting-row">
+    <label for="setDeckSize">Deck</label>
+    <select id="setDeckSize">
+      <option value="52" selected>52 cards</option>
+      <option value="48">48 cards - no Kings</option>
+      <option value="44">44 cards - No Aces or Kings</option>
+    </select>
+  </div>
+
   <h3>Game Type</h3>
   <div class="setting-row">
     <label for="setGameType">Game</label>
     <select id="setGameType">
       <option value="straight" selected>Straight Gin</option>
-      <option value="nineCard">Nine Card Gin</option>
-      <option value="nineCardDraw2">9 Card Draw 2</option>
+      <option value="duoGin">Duo Gin</option>
     </select>
   </div>
 
@@ -279,8 +284,8 @@
   <div class="setting-row" id="bigGinRow">
     <label>Big Gin Bonus</label>
     <div class="range-wrap">
-      <input type="range" id="bigGinInput" value="30" min="0" max="100" step="5">
-      <span class="range-val" id="bigGinVal">30</span>
+      <input type="range" id="bigGinInput" value="20" min="0" max="100" step="5">
+      <span class="range-val" id="bigGinVal">20</span>
     </div>
   </div>
 
@@ -358,6 +363,15 @@
 
 <div class="toast" id="toast"></div>
 
+<!-- CUSTOM CONFIRMATION MODAL -->
+<div class="toast" id="confirmBox" style="pointer-events:auto; flex-direction:column; gap:12px; display:none; top:50%;">
+  <div id="confirmMsg" style="font-size:1rem;"></div>
+  <div style="display:flex; gap:10px; justify-content:center; margin-top:8px;">
+    <button class="btn primary small" id="confirmYes" style="min-width:70px;">Yes</button>
+    <button class="btn danger small" id="confirmNo" style="min-width:70px;">No</button>
+  </div>
+</div>
+
 <script>
 (function(){
 'use strict';
@@ -373,8 +387,8 @@ function isRed(c){ return SUIT_RED[c.suit]; }
 
 const state = {
   playerScore: 0, aiScore: 0,
-  targetScore: 100, ginBonus: 20, bigGinBonus: 30,
-  gameType: 'straight', aiLevel: 'novice',
+  targetScore: 100, ginBonus: 20, bigGinBonus: 20,
+  gameType: 'straight', aiLevel: 'novice', deckSize: '52',
   timerSeconds: 0,
   deck: [], playerHand: [], aiHand: [], discardPile: [],
   upcard: null,
@@ -398,7 +412,7 @@ const state = {
 
 const $ = id => document.getElementById(id);
 
-function handSize(){ return (state.gameType === 'nineCard' || state.gameType === 'nineCardDraw2') ? 9 : 10; }
+function handSize(){ return (state.gameType === 'duoGin') ? 9 : 10; }
 
 function later(fn, ms){
   const id = setTimeout(()=>{
@@ -417,10 +431,10 @@ function cancelPending(){
 function buildDeck(){
   const d = [];
   let cardIdCounter = 0;
-  const strip = (state.gameType === 'nineCard' || state.gameType === 'nineCardDraw2');
   for(const s of SUITS) {
     for(const r of RANKS){
-      if(strip && (r === 'A' || r === 'K')) continue;
+      if(state.deckSize === '48' && r === 'K') continue;
+      if(state.deckSize === '44' && (r === 'A' || r === 'K')) continue;
       d.push({ id:'c_'+s+'_'+r+'_'+(++cardIdCounter), suit:s, rank:r });
     }
   }
@@ -550,7 +564,7 @@ function knockAllowed(hand){
   }
   if(hand.length !== n + 1) return null;
   
-  if(state.gameType === 'nineCardDraw2') {
+  if(state.gameType === 'duoGin') {
     const full = analyzeHand(hand, 'count');
     const totalMelded = full.melds.reduce((sum, m) => sum + m.length, 0);
     if(totalMelded >= 9){
@@ -619,7 +633,7 @@ function render(){
     dc.dataset.isUpcard = 'true';
     stack.appendChild(dc);
   } else if(state.discardPile.length > 0){
-    if(state.gameType === 'nineCardDraw2' && state.discardPile.length >= 2){
+    if(state.gameType === 'duoGin' && state.discardPile.length >= 2){
       stack.classList.add('staggered');
       const secondCard = state.discardPile[state.discardPile.length - 2];
       const topCard = state.discardPile[state.discardPile.length - 1];
@@ -770,6 +784,31 @@ function toast(msg){
   setTimeout(()=>t.classList.remove('show'), 2000);
 }
 
+// Custom UI implementation replacing default browser confirm() 
+function customConfirm(msg, onYes) {
+  const cb = $('confirmBox');
+  $('confirmMsg').textContent = msg;
+  cb.style.display = 'flex';
+  void cb.offsetWidth; // force reflow for smooth display transition
+  cb.classList.add('show');
+  
+  const yesBtn = $('confirmYes');
+  const noBtn = $('confirmNo');
+  
+  const cleanup = () => {
+    cb.classList.remove('show');
+    setTimeout(() => { cb.style.display = 'none'; }, 200);
+    yesBtn.removeEventListener('click', handleYes);
+    noBtn.removeEventListener('click', handleNo);
+  };
+  
+  const handleYes = () => { cleanup(); onYes(); };
+  const handleNo = () => { cleanup(); };
+  
+  yesBtn.addEventListener('click', handleYes);
+  noBtn.addEventListener('click', handleNo);
+}
+
 function saveRecord(){
   try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state.record)); }catch(e){}
 }
@@ -843,8 +882,7 @@ function showMatchSummary(playerWon){
   $('summaryAIScore').textContent = state.aiScore;
   
   let gLabel = 'Straight Gin';
-  if(state.gameType === 'nineCard') gLabel = 'Nine Card Gin';
-  if(state.gameType === 'nineCardDraw2') gLabel = '9 Card Draw 2';
+  if(state.gameType === 'duoGin') gLabel = 'Duo Gin';
 
   $('summaryGameType').textContent = gLabel;
   $('summaryRecord').textContent = state.record.wins + ' - ' + state.record.losses;
@@ -902,7 +940,7 @@ function updateTurnInstruction(){
     }
   } else if(state.phase === 'draw'){
     if(state.turn === 'player'){
-      if(state.gameType === 'nineCardDraw2'){
+      if(state.gameType === 'duoGin'){
         setMsg('Your turn: Draw 2 from Stock or pick 1 of top 2 discards.');
       } else {
         setMsg('Your turn: Tap STOCK or DISCARD to draw.');
@@ -945,7 +983,7 @@ function handlePlayerPass(){
     state.upcard = null;
     const nonDealer = state.dealer === 'player' ? 'ai' : 'player';
 
-    if(state.gameType === 'nineCardDraw2'){
+    if(state.gameType === 'duoGin'){
       if(nonDealer === 'player'){
         if(state.deck.length < 2){ endHandDraw(); return; }
         state.busy = true;
@@ -1017,7 +1055,7 @@ function handleDrawStock(){
   if(state.handOver || state.busy || state.turn !== 'player') return;
   if(state.phase !== 'draw') return;
 
-  const countToDraw = state.gameType === 'nineCardDraw2' ? 2 : 1;
+  const countToDraw = state.gameType === 'duoGin' ? 2 : 1;
   if(state.deck.length < countToDraw){
     endHandDraw();
     return;
@@ -1062,7 +1100,7 @@ function handleDrawDiscard(targetIdx){
   if(state.discardPile.length === 0) return;
 
   let popIdx = state.discardPile.length - 1;
-  if(state.gameType === 'nineCardDraw2' && typeof targetIdx === 'number'){
+  if(state.gameType === 'duoGin' && typeof targetIdx === 'number'){
     popIdx = targetIdx;
   }
   if(popIdx < 0 || popIdx >= state.discardPile.length) return;
@@ -1199,7 +1237,7 @@ function aiDecisionOffer(){
       state.upcard = null;
       const nonDealer = state.dealer === 'player' ? 'ai' : 'player';
 
-      if(state.gameType === 'nineCardDraw2'){
+      if(state.gameType === 'duoGin'){
         if(nonDealer === 'ai'){
           if(state.deck.length < 2){ endHandDraw(); return; }
           state.busy = true;
@@ -1250,7 +1288,7 @@ function aiDecisionOffer(){
 function aiTurnDraw(){
   if(state.phase !== 'draw' || state.turn !== 'ai') return;
   
-  if(state.gameType === 'nineCardDraw2'){
+  if(state.gameType === 'duoGin'){
     let bestPickIdx = -1;
     let bestDiff = 0;
     
@@ -1414,7 +1452,28 @@ function endHandDraw(){
   state.handOver = true;
   state.reveal = true;
   if(state.timerId){ clearInterval(state.timerId); state.timerId = null; }
-  showResultModal('Stock Exhausted', 'The stock pile is empty. This hand is a draw with 0 points awarded.');
+  
+  if (state.gameType === 'duoGin') {
+    const pAn = analyzeHand(state.playerHand, 'count');
+    const aAn = analyzeHand(state.aiHand, 'count');
+    const pPts = pAn.deadwood.reduce((s,c)=>s+cardPts(c),0);
+    const aPts = aAn.deadwood.reduce((s,c)=>s+cardPts(c),0);
+    
+    if (pPts < aPts) {
+      const diff = aPts - pPts;
+      state.playerScore += diff;
+      showResultModal('Deck Empty! You Win', `You had ${pPts} deadwood. AI had ${aPts}. You score ${diff} pts.`);
+    } else if (aPts < pPts) {
+      const diff = pPts - aPts;
+      state.aiScore += diff;
+      showResultModal('Deck Empty! AI Wins', `AI had ${aPts} deadwood. You had ${pPts}. AI scores ${diff} pts.`);
+    } else {
+      showResultModal('Deck Empty! Tie', `Both players had ${pPts} deadwood. 0 points awarded.`);
+    }
+  } else {
+    showResultModal('Stock Exhausted', 'The stock pile is empty. This hand is a draw with 0 points awarded.');
+  }
+  
   render();
 }
 
@@ -1579,9 +1638,9 @@ function initApp(){
   });
 
   $('newGameBtn').addEventListener('click', ()=>{
-    if(confirm('Start a new game? Current scores will reset.')){
+    customConfirm('Start a new game? Current scores will reset.', () => {
       startMatch();
-    }
+    });
   });
 
   $('resNext').addEventListener('click', ()=>{
@@ -1629,6 +1688,10 @@ function initApp(){
   $('settingsClose').addEventListener('click', () => {
     $('settingsPanel').classList.add('hidden');
   });
+  
+  $('setDeckSize').addEventListener('change', (e) => {
+    state.deckSize = e.target.value;
+  });
 
   $('setGameType').addEventListener('change', (e) => {
     state.gameType = e.target.value;
@@ -1675,9 +1738,9 @@ function initApp(){
   }
 
   $('resetRecordBtn').addEventListener('click', () => {
-    if (confirm('Reset all saved records?')) {
+    customConfirm('Reset all saved records?', () => {
       resetAllRecord();
-    }
+    });
   });
 
   loadRecord();
