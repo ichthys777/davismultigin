@@ -31,12 +31,12 @@
   .start-screen.hidden { display:none; }
   .start-screen h1 { font-size:1.9rem; font-weight:800; color:#ffe484; margin:0 0 8px; text-align:center; text-shadow: 0 3px 8px rgba(0,0,0,0.7); }
   .start-screen h2 { font-size:0.85rem; color:#8fb894; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin: 12px 0 4px; }
-  .gtype-grid { display:flex; gap:12px; width:100%; max-width:360px; }
-  .gtype-card { flex:1; background:#14291b; border:2px solid #2d4d38; border-radius:16px; padding:16px 10px; color:#d4e4c8; font-weight:700; font-size:0.85rem; text-align:center; cursor:pointer; transition: all 0.15s; box-shadow: 0 4px 8px rgba(0,0,0,0.4); }
+  .gtype-grid { display:flex; gap:8px; width:100%; max-width:380px; }
+  .gtype-card { flex:1; background:#14291b; border:2px solid #2d4d38; border-radius:16px; padding:14px 6px; color:#d4e4c8; font-weight:700; font-size:0.8rem; text-align:center; cursor:pointer; transition: all 0.15s; box-shadow: 0 4px 8px rgba(0,0,0,0.4); }
   .gtype-card.selected { background:#2a5a3a; border-color:#ffd966; color:#ffe484; box-shadow: 0 0 0 3px rgba(255,217,102,0.35), 0 6px 12px rgba(0,0,0,0.6); transform: translateY(-2px); }
-  .gtype-card .sub { display:block; font-size:0.65rem; color:#8fb894; margin-top:6px; font-weight:600; letter-spacing:0.3px; line-height:1.3; }
+  .gtype-card .sub { display:block; font-size:0.62rem; color:#8fb894; margin-top:6px; font-weight:600; letter-spacing:0.2px; line-height:1.25; }
   .gtype-card.selected .sub { color:#c8dcb8; }
-  .start-btn { width:100%; max-width:360px; background:#c98a2b; color:#fff; border:none; border-radius:22px; padding:16px; font-size:1.05rem; font-weight:800; box-shadow: 0 4px 0 #7a5216, 0 6px 12px rgba(0,0,0,0.5); cursor:pointer; letter-spacing:1px; margin-top:6px; }
+  .start-btn { width:100%; max-width:380px; background:#c98a2b; color:#fff; border:none; border-radius:22px; padding:16px; font-size:1.05rem; font-weight:800; box-shadow: 0 4px 0 #7a5216, 0 6px 12px rgba(0,0,0,0.5); cursor:pointer; letter-spacing:1px; margin-top:6px; }
   .start-btn:active { transform:translateY(3px); box-shadow: 0 1px 0 #7a5216, 0 3px 6px rgba(0,0,0,0.5); }
   .start-btn.secondary { background:#3d6e4a; box-shadow: 0 4px 0 #1a331f, 0 6px 12px rgba(0,0,0,0.5); }
   .start-btn.secondary:active { box-shadow: 0 1px 0 #1a331f, 0 3px 6px rgba(0,0,0,0.5); }
@@ -56,7 +56,9 @@
   .opp-row { display:flex; justify-content:center; align-items:center; flex-wrap:nowrap; height:72px; gap:3px; padding:4px 0; flex-shrink:0; overflow:visible; }
   .opp-row .card.small { flex:0 1 42px; min-width:0; width:auto; max-width:42px; }
   .mid-row { flex:1; display:flex; align-items:center; justify-content:center; gap:30px; min-height:0; padding:6px 0; position:relative; }
+  .mid-row.three-up { gap:14px; }
   .pile { display:flex; flex-direction:column; align-items:center; gap:3px; position:relative; }
+  .pile.hidden { display:none; }
   .pile .label { font-size:0.56rem; letter-spacing:1px; color:#8fb894; font-weight:700; }
   .stock-counter { font-size:0.62rem; color:#ffe484; font-weight:700; margin-top:2px; }
 
@@ -89,12 +91,14 @@
   .card.dragging { z-index:100; opacity:0.95; box-shadow: 0 12px 22px rgba(0,0,0,0.85), 0 0 0 3px #7fe0a0, 0 0 0 5px #3d9e5a; background:#e9ffe9; }
   .card.dragover { box-shadow: 0 0 0 3px #7fe0a0, 0 3px 6px rgba(0,0,0,0.5); }
   .card.empty-slot { background:rgba(0,0,0,0.15); box-shadow:inset 0 0 0 1px rgba(255,255,255,0.1); color:transparent; }
+  .card.locked-card { opacity: 0.72; box-shadow: 0 0 0 2px #a83a3a, 0 3px 6px rgba(0,0,0,0.55); }
   
   .card.meld-highlight { box-shadow: 0 0 0 2px #4ade80, 0 0 10px rgba(74, 222, 128, 0.6), 0 3px 6px rgba(0,0,0,0.55); }
   
   .card.upcard-highlight { box-shadow: 0 0 0 3px #ffd966, 0 0 16px rgba(255,217,102,0.7), 0 3px 6px rgba(0,0,0,0.55); animation: upPulse 1.5s ease-in-out infinite; }
   @keyframes upPulse { 0%, 100% { box-shadow: 0 0 0 3px #ffd966, 0 0 16px rgba(255,217,102,0.7), 0 3px 6px rgba(0,0,0,0.55); } 50% { box-shadow: 0 0 0 3px #ffd966, 0 0 26px rgba(255,217,102,1.0), 0 3px 6px rgba(0,0,0,0.55); } }
   .fly-card { position:fixed; z-index:500; pointer-events:none; transition: all 0.65s cubic-bezier(0.25, 1, 0.5, 1); }
+  .fly-card.slow-ai { transition: all 1.25s cubic-bezier(0.22, 0.61, 0.36, 1); box-shadow: 0 10px 24px rgba(0,0,0,0.85), 0 0 0 2px #ffd966; }
   .fly-card.fade { opacity:0; transform:scale(0.85); }
   .bottom-bar { display:flex; gap:8px; padding:6px 2px 4px; align-items:center; flex-shrink:0; }
   .btn { background:#3d6e4a; border:none; border-radius:22px; color:#fff; font-weight:700; font-size:0.82rem; padding:11px 14px; box-shadow: 0 3px 0 #1a331f, 0 4px 8px rgba(0,0,0,0.5); transition: transform 0.05s, box-shadow 0.05s; touch-action: manipulation; cursor:pointer; white-space:nowrap; }
@@ -164,7 +168,7 @@
   .summary-stats .row b { color:#ffe484; }
   .match-btn-group { display:flex; flex-direction:column; gap:10px; width:100%; max-width:380px; margin-top:4px; }
   @media (max-width: 460px) { .card:not(.small) { width:calc((100vw - 16px - 36px) / 6); height:calc((100vw - 16px - 36px) / 6 * 1.4); } }
-  @media (max-height: 700px) { .card:not(.small) { height:70px; } .opp-row { height:56px; } .player-row { min-height:80px; } .mid-row { gap:22px; } }
+  @media (max-height: 700px) { .card:not(.small) { height:70px; } .opp-row { height:56px; } .player-row { min-height:80px; } .mid-row { gap:22px; } .mid-row.three-up { gap:10px; } }
   @media (max-height: 600px) { .card:not(.small) { height:62px; } .card .r { font-size:0.85rem; } .card .s { font-size:0.9rem; } }
 </style>
 </head>
@@ -181,13 +185,17 @@
       Duo Gin
       <span class="sub">Pick top 2 discards or draw 2.</span>
     </div>
+    <div class="gtype-card" data-gtype="threeUpGin">
+      3-Up Gin
+      <span class="sub">2 Open Market cards + Discard. Knock ≤ 5.</span>
+    </div>
   </div>
-  <button class="start-btn secondary" id="startSettingsBtn">&#9881;&#xFE0E; Settings</button>
-  <button class="start-btn" id="startGameBtn">&#9654; START GAME</button>
+  <button class="start-btn secondary" id="startSettingsBtn">⚙︎ Settings</button>
+  <button class="start-btn" id="startGameBtn">▶ START GAME</button>
 </div>
 
 <!-- GAME SCREEN -->
-<button class="settings-toggle" id="settingsToggle">&#9881;&#xFE0E; Settings</button>
+<button class="settings-toggle" id="settingsToggle">⚙︎ Settings</button>
 
 <div class="top-bar">
   <div class="scores">
@@ -203,7 +211,25 @@
 <div class="table">
   <div class="opp-row" id="opponentHandRow"></div>
 
-  <div class="mid-row">
+  <div class="mid-row" id="midRow">
+    <!-- 3-Up Gin Open Market Left & Right (Left of Stock) -->
+    <div class="pile hidden" id="marketLeftWrap">
+      <div class="card empty-slot" id="marketLeftCard"></div>
+      <div class="label">MARKET L</div>
+    </div>
+    <div class="pile hidden" id="marketRightWrap">
+      <div class="card empty-slot" id="marketRightCard"></div>
+      <div class="label">MARKET R</div>
+    </div>
+
+    <!-- Stock (Center) -->
+    <div class="pile" id="stockPileWrap">
+      <div class="card back" id="deckCard" role="button"></div>
+      <div class="label">STOCK</div>
+      <div class="stock-counter" id="stockCounter">Stock: 31</div>
+    </div>
+
+    <!-- Discard (Right of Stock) -->
     <div class="pile" id="discardPileWrap">
       <div class="discard-stack" id="discardStack">
         <div class="card empty-slot" id="discardCard"></div>
@@ -213,11 +239,6 @@
       <div class="pass-btn-wrap" id="passBtnWrap">
         <button class="pass-btn" id="passBtn">PASS</button>
       </div>
-    </div>
-    <div class="pile" id="stockPileWrap">
-      <div class="card back" id="deckCard" role="button"></div>
-      <div class="label">STOCK</div>
-      <div class="stock-counter" id="stockCounter">Stock: 31</div>
     </div>
   </div>
 
@@ -236,7 +257,7 @@
   <h2>Settings</h2>
 
   <h3>Deck</h3>
-  <div class="setting-row">
+  <div class="setting-row" id="deckSizeRow">
     <label for="setDeckSize">Deck</label>
     <select id="setDeckSize">
       <option value="52" selected>52 cards</option>
@@ -251,6 +272,7 @@
     <select id="setGameType">
       <option value="straight" selected>Straight Gin</option>
       <option value="duoGin">Duo Gin</option>
+      <option value="threeUpGin">3-Up Gin</option>
     </select>
   </div>
 
@@ -288,6 +310,13 @@
       <span class="range-val" id="bigGinVal">20</span>
     </div>
   </div>
+  <div class="setting-row" id="undercutRow">
+    <label>Undercut Bonus</label>
+    <div class="range-wrap">
+      <input type="range" id="undercutInput" value="20" min="0" max="100" step="5">
+      <span class="range-val" id="undercutVal">20</span>
+    </div>
+  </div>
 
   <h3>Turn Timer</h3>
   <div class="setting-row">
@@ -306,7 +335,7 @@
     <div class="title">All-time</div>
     <div class="row"><span>Wins</span><b id="recWins">0</b></div>
     <div class="row"><span>Losses</span><b id="recLosses">0</b></div>
-    <div class="title">Current Series (best of 5)</div>
+    <div class="title">Current Series (best of 3)</div>
     <div class="row"><span>You</span><b id="recSeriesYou">0</b></div>
     <div class="row"><span>AI</span><b id="recSeriesAI">0</b></div>
     <div class="title">Series Won / Lost</div>
@@ -326,7 +355,7 @@
   <div class="res-hand" id="resAI"></div>
   <div class="res-label" id="resYouLabel">Your hand</div>
   <div class="res-hand" id="resYou"></div>
-  <div class="res-legend">Green boxes = melds &middot; Red box = deadwood</div>
+  <div class="res-legend">Green boxes = melds · Red box = deadwood</div>
   <button class="btn primary res-next" id="resNext">Next Hand</button>
 </div>
 
@@ -350,14 +379,14 @@
     <div class="summary-stats">
       <div class="row"><span>Game Type:</span><b id="summaryGameType">Straight Gin</b></div>
       <div class="row"><span>All-Time Wins / Losses:</span><b id="summaryRecord">0 - 0</b></div>
-      <div class="row"><span>Best of 5 Series Score:</span><b id="summarySeriesScore">0 - 0</b></div>
+      <div class="row"><span>Best of 3 Series Score:</span><b id="summarySeriesScore">0 - 0</b></div>
       <div class="row"><span>Series Wins / Losses:</span><b id="summarySeriesWinsLosses">0 - 0</b></div>
     </div>
   </div>
 
   <div class="match-btn-group">
-    <button class="start-btn" id="playAgainBtn">&#9654; PLAY AGAIN</button>
-    <button class="start-btn secondary" id="homePageBtn">&#127968; HOME PAGE</button>
+    <button class="start-btn" id="playAgainBtn">▶ PLAY AGAIN</button>
+    <button class="start-btn secondary" id="homePageBtn">🏠 HOME PAGE</button>
   </div>
 </div>
 
@@ -387,10 +416,13 @@ function isRed(c){ return SUIT_RED[c.suit]; }
 
 const state = {
   playerScore: 0, aiScore: 0,
-  targetScore: 100, ginBonus: 20, bigGinBonus: 20,
+  targetScore: 100, ginBonus: 20, bigGinBonus: 20, undercutBonus: 20,
   gameType: 'straight', aiLevel: 'novice', deckSize: '52',
   timerSeconds: 0,
   deck: [], playerHand: [], aiHand: [], discardPile: [],
+  marketLeft: null, marketRight: null,
+  pendingMarketRefill: null,
+  drawnFromDiscardId: null,
   upcard: null,
   dealer: 'player',
   turn: 'player',
@@ -412,7 +444,7 @@ const state = {
 
 const $ = id => document.getElementById(id);
 
-function handSize(){ return (state.gameType === 'duoGin') ? 9 : 10; }
+function handSize(){ return (state.gameType === 'duoGin' || state.gameType === 'threeUpGin') ? 9 : 10; }
 
 function later(fn, ms){
   const id = setTimeout(()=>{
@@ -431,10 +463,11 @@ function cancelPending(){
 function buildDeck(){
   const d = [];
   let cardIdCounter = 0;
+  const effectiveDeckSize = state.gameType === 'threeUpGin' ? '52' : state.deckSize;
   for(const s of SUITS) {
     for(const r of RANKS){
-      if(state.deckSize === '48' && r === 'K') continue;
-      if(state.deckSize === '44' && (r === 'A' || r === 'K')) continue;
+      if(effectiveDeckSize === '48' && r === 'K') continue;
+      if(effectiveDeckSize === '44' && (r === 'A' || r === 'K')) continue;
       d.push({ id:'c_'+s+'_'+r+'_'+(++cardIdCounter), suit:s, rank:r });
     }
   }
@@ -540,9 +573,54 @@ function deadwoodPoints(hand){
   return analyzeHand(hand).deadwood.reduce((s,c)=>s+cardPts(c),0);
 }
 
-function bestKnock(hand, mode){
+// Lay off non-knocker's deadwood onto knocker's melds (for 3-Up Gin)
+function layOffDeadwood(knockerMelds, defenderDeadwood){
+  const melds = knockerMelds.map(m => m.slice());
+  const remaining = defenderDeadwood.slice();
+  const laidOff = [];
+  let changed = true;
+
+  while(changed){
+    changed = false;
+    for(let i = 0; i < remaining.length; i++){
+      const card = remaining[i];
+      let matched = false;
+      for(const m of melds){
+        const isSet = m.length >= 3 && m[0].rank === m[1].rank;
+        if(isSet){
+          if(m.length < 4 && card.rank === m[0].rank){
+            m.push(card);
+            matched = true;
+            break;
+          }
+        } else {
+          if(card.suit === m[0].suit){
+            const sorted = m.slice().sort((a,b)=>rankVal(a.rank)-rankVal(b.rank));
+            const minR = rankVal(sorted[0].rank);
+            const maxR = rankVal(sorted[sorted.length-1].rank);
+            const cR = rankVal(card.rank);
+            if(cR === minR - 1 || cR === maxR + 1){
+              m.push(card);
+              matched = true;
+              break;
+            }
+          }
+        }
+      }
+      if(matched){
+        laidOff.push(remaining.splice(i, 1)[0]);
+        changed = true;
+        break;
+      }
+    }
+  }
+  return { remaining, laidOff, updatedMelds: melds };
+}
+
+function bestKnock(hand, mode, forbiddenId){
   let best = null;
   for(let i=0;i<hand.length;i++){
+    if(forbiddenId && hand[i].id === forbiddenId) continue;
     const rest = hand.filter((c,k)=>k!==i);
     const a = analyzeHand(rest, mode);
     const p = a.deadwood.reduce((t,c)=>t+cardPts(c),0);
@@ -556,8 +634,48 @@ function bestKnock(hand, mode){
   return best;
 }
 
+// For 3-Up Gin: discards the highest-value card that leaves the lowest possible deadwood
+function bestThreeUpKnock(hand, forbiddenId){
+  let best = null;
+  for(let i=0;i<hand.length;i++){
+    if(forbiddenId && hand[i].id === forbiddenId) continue;
+    const cand = hand[i];
+    const rest = hand.filter((c,k)=>k!==i);
+    const a = analyzeHand(rest, 'pts');
+    const p = a.deadwood.reduce((t,c)=>t+cardPts(c),0);
+    const cnt = a.deadwood.length;
+    const discPts = cardPts(cand);
+    const discRank = rankVal(cand.rank);
+    if(!best){
+      best = { card: cand, pts: p, cnt: cnt, discPts, discRank };
+    } else {
+      if(p < best.pts || (p === best.pts && (discPts > best.discPts || (discPts === best.discPts && discRank > best.discRank)))){
+        best = { card: cand, pts: p, cnt: cnt, discPts, discRank };
+      }
+    }
+  }
+  return best;
+}
+
 function knockAllowed(hand){
   const n = handSize();
+  if(state.gameType === 'threeUpGin'){
+    if(hand.length === n){
+      const a = analyzeHand(hand, 'pts');
+      const pts = a.deadwood.reduce((s,c)=>s+cardPts(c),0);
+      if(a.deadwood.length === 0) return { card: null, pts: 0, cnt: 0, isGin: true };
+      if(pts <= 5) return { card: null, pts: pts, cnt: a.deadwood.length, isGin: false };
+      return null;
+    }
+    if(hand.length === n + 1){
+      const bk = bestThreeUpKnock(hand, state.drawnFromDiscardId);
+      if(!bk) return null;
+      if(bk.cnt === 0) return { card: bk.card, pts: 0, cnt: 0, isGin: true };
+      if(bk.pts <= 5) return { card: bk.card, pts: bk.pts, cnt: bk.cnt, isGin: false };
+    }
+    return null;
+  }
+
   if(hand.length === n){
     const a = analyzeHand(hand, 'count');
     return a.deadwood.length === 0 ? { card: null, pts: 0, cnt: 0, bigGin: false } : null;
@@ -617,6 +735,44 @@ function render(){
   $('seriesDisplay').textContent = state.record.curYou + '-' + state.record.curAI;
   $('dealerIndicator').textContent = 'Dealer: ' + (state.dealer==='player'?'You':'AI');
 
+  const midRow = $('midRow');
+  const mLeftWrap = $('marketLeftWrap');
+  const mRightWrap = $('marketRightWrap');
+
+  if(state.gameType === 'threeUpGin'){
+    midRow.classList.add('three-up');
+    mLeftWrap.classList.remove('hidden');
+    mRightWrap.classList.remove('hidden');
+
+    const mLeftEl = $('marketLeftCard');
+    if(state.marketLeft){
+      const newL = makeCardEl(state.marketLeft);
+      newL.id = 'marketLeftCard';
+      mLeftEl.replaceWith(newL);
+    } else {
+      const empL = document.createElement('div');
+      empL.className = 'card empty-slot';
+      empL.id = 'marketLeftCard';
+      mLeftEl.replaceWith(empL);
+    }
+
+    const mRightEl = $('marketRightCard');
+    if(state.marketRight){
+      const newR = makeCardEl(state.marketRight);
+      newR.id = 'marketRightCard';
+      mRightEl.replaceWith(newR);
+    } else {
+      const empR = document.createElement('div');
+      empR.className = 'card empty-slot';
+      empR.id = 'marketRightCard';
+      mRightEl.replaceWith(empR);
+    }
+  } else {
+    midRow.classList.remove('three-up');
+    mLeftWrap.classList.add('hidden');
+    mRightWrap.classList.add('hidden');
+  }
+
   const opp = $('opponentHandRow'); opp.innerHTML = '';
   for(let i=0;i<state.aiHand.length;i++){
     opp.appendChild(state.reveal ? makeCardEl(state.aiHand[i], {small:true}) : makeBackEl(true));
@@ -665,7 +821,8 @@ function render(){
 
   if(state.dragId !== null && Date.now() - state.dragT > 8000) state.dragId = null;
   if(state.dragId === null){
-    const playerMeldAnalysis = analyzeHand(state.playerHand, 'count');
+    const analysisMode = state.gameType === 'threeUpGin' ? 'pts' : 'count';
+    const playerMeldAnalysis = analyzeHand(state.playerHand, analysisMode);
     const meldedSet = new Set();
     playerMeldAnalysis.melds.forEach(m => m.forEach(c => meldedSet.add(c.id)));
 
@@ -674,6 +831,9 @@ function render(){
       const el = makeCardEl(c, { isNew: state.newCardIds.includes(c.id) });
       if(c.id === state.selectedId) el.classList.add('selected');
       if(meldedSet.has(c.id)) el.classList.add('meld-highlight');
+      if(state.gameType === 'threeUpGin' && state.phase === 'discard' && state.drawnFromDiscardId === c.id){
+        el.classList.add('locked-card');
+      }
       attachCardDrag(el, c.id);
       pr.appendChild(el);
     }
@@ -694,10 +854,14 @@ function render(){
 
   if(!state.handOver && state.turn==='player' && state.phase==='discard' && kInfo){
     kb.disabled = false;
-    kb.textContent = 'Gin!';
+    if(state.gameType === 'threeUpGin' && !kInfo.isGin){
+      kb.textContent = 'Knock';
+    } else {
+      kb.textContent = 'Gin!';
+    }
   } else {
     kb.disabled = true;
-    kb.textContent = 'Gin!';
+    kb.textContent = state.gameType === 'threeUpGin' ? 'Knock' : 'Gin!';
   }
 
   updateTimerUI();
@@ -745,24 +909,33 @@ function handleTimeOut(){
   if(state.phase === 'offer' && offerStagePlayer() === 'player'){
     handlePlayerPass();
   } else if(state.phase === 'draw'){
-    handleDrawStock();
+    if(state.gameType === 'threeUpGin'){
+      if(state.marketLeft) handleDrawMarket('left');
+      else if(state.marketRight) handleDrawMarket('right');
+      else if(state.discardPile.length > 0) handleDrawDiscard();
+    } else {
+      handleDrawStock();
+    }
   } else if(state.phase === 'discard'){
-    const c = state.playerHand[state.playerHand.length - 1];
-    if(c) handleDiscardCard(c.id);
+    const validCard = state.playerHand.slice().reverse().find(c => c.id !== state.drawnFromDiscardId);
+    if(validCard) handleDiscardCard(validCard.id);
   }
 }
 
-function animateCardFly(fromEl, toEl, card, onComplete){
+function animateCardFly(fromEl, toEl, card, onComplete, slowAI){
   if(!fromEl || !toEl){ if(onComplete) onComplete(); return; }
   const r1 = fromEl.getBoundingClientRect();
   const r2 = toEl.getBoundingClientRect();
-  const fly = makeCardEl(card || { rank: '', suit: '' });
-  fly.className += ' fly-card';
+  const fly = card ? makeCardEl(card) : makeBackEl(false);
+  fly.className += slowAI ? ' fly-card slow-ai' : ' fly-card';
   fly.style.left = r1.left + 'px';
   fly.style.top = r1.top + 'px';
   fly.style.width = r1.width + 'px';
   fly.style.height = r1.height + 'px';
   document.body.appendChild(fly);
+
+  // Force reflow so the initial coordinates register before animating
+  void fly.offsetWidth;
 
   requestAnimationFrame(()=>{
     fly.style.left = r2.left + 'px';
@@ -771,10 +944,11 @@ function animateCardFly(fromEl, toEl, card, onComplete){
     fly.style.height = r2.height + 'px';
   });
 
+  const flyDuration = slowAI ? 1250 : 500;
   setTimeout(()=>{
     fly.classList.add('fade');
-    setTimeout(()=>{ fly.remove(); if(onComplete) onComplete(); }, 200);
-  }, 500);
+    setTimeout(()=>{ fly.remove(); if(onComplete) onComplete(); }, 220);
+  }, flyDuration);
 }
 
 function toast(msg){
@@ -784,12 +958,11 @@ function toast(msg){
   setTimeout(()=>t.classList.remove('show'), 2000);
 }
 
-// Custom UI implementation replacing default browser confirm() 
 function customConfirm(msg, onYes) {
   const cb = $('confirmBox');
   $('confirmMsg').textContent = msg;
   cb.style.display = 'flex';
-  void cb.offsetWidth; // force reflow for smooth display transition
+  void cb.offsetWidth;
   cb.classList.add('show');
   
   const yesBtn = $('confirmYes');
@@ -843,8 +1016,10 @@ function startMatch(){
   state.playerScore = 0;
   state.aiScore = 0;
   state.dealer = Math.random() < 0.5 ? 'player' : 'ai';
-  state.record.curYou = 0;
-  state.record.curAI = 0;
+  if(state.record.curYou >= 2 || state.record.curAI >= 2){
+    state.record.curYou = 0;
+    state.record.curAI = 0;
+  }
   saveRecord();
   updateRecordUI();
   $('matchSummaryPanel').classList.add('hidden');
@@ -862,14 +1037,23 @@ function checkMatchOver(){
       state.record.curAI++;
     }
 
-    if(state.record.curYou >= 3 || state.record.curAI >= 3){
-      if(state.record.curYou >= 3) state.record.seriesWins++;
+    // Best 2 out of 3 Series Calculation
+    if(state.record.curYou >= 2 || state.record.curAI >= 2){
+      if(state.record.curYou >= 2) state.record.seriesWins++;
       else state.record.seriesLosses++;
     }
 
     saveRecord();
     updateRecordUI();
     showMatchSummary(playerWon);
+
+    // Reset current series score after displaying summary so next series starts 0-0
+    if(state.record.curYou >= 2 || state.record.curAI >= 2){
+      state.record.curYou = 0;
+      state.record.curAI = 0;
+      saveRecord();
+      updateRecordUI();
+    }
     return true;
   }
   return false;
@@ -883,6 +1067,7 @@ function showMatchSummary(playerWon){
   
   let gLabel = 'Straight Gin';
   if(state.gameType === 'duoGin') gLabel = 'Duo Gin';
+  else if(state.gameType === 'threeUpGin') gLabel = '3-Up Gin';
 
   $('summaryGameType').textContent = gLabel;
   $('summaryRecord').textContent = state.record.wins + ' - ' + state.record.losses;
@@ -899,6 +1084,10 @@ function startHand(){
   state.playerHand = [];
   state.aiHand = [];
   state.discardPile = [];
+  state.marketLeft = null;
+  state.marketRight = null;
+  state.pendingMarketRefill = null;
+  state.drawnFromDiscardId = null;
   state.upcard = null;
   state.handOver = false;
   state.reveal = false;
@@ -925,6 +1114,32 @@ function startHand(){
   updateTurnInstruction();
 }
 
+function populateThreeUpMarket(){
+  if(state.gameType !== 'threeUpGin') return;
+  if(!state.marketLeft && state.deck.length > 0){
+    state.marketLeft = state.deck.pop();
+  }
+  if(!state.marketRight && state.deck.length > 0){
+    state.marketRight = state.deck.pop();
+  }
+}
+
+function refillPendingMarketSlot(onComplete){
+  const side = state.pendingMarketRefill;
+  state.pendingMarketRefill = null;
+  if(!side || state.deck.length === 0){
+    if(onComplete) onComplete();
+    return;
+  }
+  const newCard = state.deck.pop();
+  const targetEl = side === 'left' ? $('marketLeftCard') : $('marketRightCard');
+  animateCardFly($('deckCard'), targetEl, newCard, ()=>{
+    if(side === 'left') state.marketLeft = newCard;
+    else state.marketRight = newCard;
+    if(onComplete) onComplete();
+  });
+}
+
 function updateTurnInstruction(){
   if(state.handOver) return;
 
@@ -942,6 +1157,8 @@ function updateTurnInstruction(){
     if(state.turn === 'player'){
       if(state.gameType === 'duoGin'){
         setMsg('Your turn: Draw 2 from Stock or pick 1 of top 2 discards.');
+      } else if(state.gameType === 'threeUpGin'){
+        setMsg('Your turn: Take Market L, Market R, or Discard.');
       } else {
         setMsg('Your turn: Tap STOCK or DISCARD to draw.');
       }
@@ -955,6 +1172,13 @@ function updateTurnInstruction(){
     if(state.turn === 'player'){
       if(state.discardsNeeded > 1){
         setMsg('Your turn: Discard ' + state.discardsNeeded + ' cards to keep 9 in hand.');
+      } else if(state.gameType === 'threeUpGin'){
+        const kInfo = knockAllowed(state.playerHand);
+        if(kInfo && !kInfo.isGin){
+          setMsg('Tap a card to discard, or tap Knock!');
+        } else {
+          setMsg('Your turn: Tap a card to discard.');
+        }
       } else {
         setMsg('Your turn: Tap a card to discard (or Gin if allowed).');
       }
@@ -983,7 +1207,13 @@ function handlePlayerPass(){
     state.upcard = null;
     const nonDealer = state.dealer === 'player' ? 'ai' : 'player';
 
-    if(state.gameType === 'duoGin'){
+    if(state.gameType === 'threeUpGin'){
+      populateThreeUpMarket();
+      state.phase = 'draw';
+      state.turn = nonDealer;
+      render();
+      updateTurnInstruction();
+    } else if(state.gameType === 'duoGin'){
       if(nonDealer === 'player'){
         if(state.deck.length < 2){ endHandDraw(); return; }
         state.busy = true;
@@ -1039,6 +1269,10 @@ function handleTakeUpcard(){
   state.upcard = null;
   state.playerHand.push(card);
   state.newCardIds = [card.id];
+  if(state.gameType === 'threeUpGin'){
+    state.drawnFromDiscardId = card.id;
+    populateThreeUpMarket();
+  }
   sortHand(state.playerHand);
 
   animateCardFly($('discardStack'), $('playerHandRow'), card, ()=>{
@@ -1051,9 +1285,43 @@ function handleTakeUpcard(){
   });
 }
 
+function handleDrawMarket(side){
+  if(state.handOver || state.busy || state.turn !== 'player') return;
+  if(state.phase !== 'draw' || state.gameType !== 'threeUpGin') return;
+
+  const card = side === 'left' ? state.marketLeft : state.marketRight;
+  if(!card) return;
+
+  state.busy = true;
+  if(side === 'left') state.marketLeft = null;
+  else state.marketRight = null;
+
+  // Mark slot to replenish ONLY AFTER a card is discarded
+  state.pendingMarketRefill = side;
+  state.drawnFromDiscardId = null;
+  state.playerHand.push(card);
+  state.newCardIds = [card.id];
+  sortHand(state.playerHand);
+  state.discardsNeeded = 1;
+
+  const fromEl = side === 'left' ? $('marketLeftCard') : $('marketRightCard');
+  render();
+
+  animateCardFly(fromEl, $('playerHandRow'), card, ()=>{
+    state.phase = 'discard';
+    state.busy = false;
+    render();
+    updateTurnInstruction();
+  });
+}
+
 function handleDrawStock(){
   if(state.handOver || state.busy || state.turn !== 'player') return;
   if(state.phase !== 'draw') return;
+  if(state.gameType === 'threeUpGin'){
+    toast('Choose Market L, Market R, or Discard');
+    return;
+  }
 
   const countToDraw = state.gameType === 'duoGin' ? 2 : 1;
   if(state.deck.length < countToDraw){
@@ -1109,6 +1377,9 @@ function handleDrawDiscard(targetIdx){
   const card = state.discardPile.splice(popIdx, 1)[0];
   state.playerHand.push(card);
   state.newCardIds = [card.id];
+  if(state.gameType === 'threeUpGin'){
+    state.drawnFromDiscardId = card.id;
+  }
   sortHand(state.playerHand);
   state.discardsNeeded = 1;
 
@@ -1125,6 +1396,11 @@ function handleDiscardCard(cardId){
   if(state.handOver || state.busy || state.turn !== 'player') return;
   if(state.phase !== 'discard') return;
 
+  if(state.gameType === 'threeUpGin' && state.drawnFromDiscardId === cardId){
+    toast('Cannot discard the card just taken from Discard!');
+    return;
+  }
+
   const idx = state.playerHand.findIndex(c=>c.id===cardId);
   if(idx === -1) return;
 
@@ -1132,6 +1408,7 @@ function handleDiscardCard(cardId){
   const card = state.playerHand.splice(idx, 1)[0];
   state.discardPile.push(card);
   state.selectedId = null;
+  state.drawnFromDiscardId = null;
   state.newCardIds = state.newCardIds.filter(id => id !== cardId);
   sortHand(state.playerHand);
   state.discardsNeeded--;
@@ -1140,26 +1417,40 @@ function handleDiscardCard(cardId){
   const cardEl = pr.querySelector('[data-cid="'+cardId+'"]');
 
   animateCardFly(cardEl, $('discardStack'), card, ()=>{
-    state.busy = false;
+    const finishPlayerDiscard = () => {
+      state.busy = false;
 
-    const kInfo = knockAllowed(state.playerHand);
-    if(kInfo && kInfo.cnt === 0){
-      endHandKnock('player', false);
-      return;
-    }
-
-    if(state.discardsNeeded > 0){
-      render();
-      updateTurnInstruction();
-    } else {
-      if(state.deck.length === 0){
-        endHandDraw();
+      const kInfo = knockAllowed(state.playerHand);
+      if(kInfo && kInfo.cnt === 0){
+        endHandKnock('player', true);
         return;
       }
-      state.phase = 'draw';
-      state.turn = 'ai';
+
+      if(state.discardsNeeded > 0){
+        render();
+        updateTurnInstruction();
+      } else {
+        if(state.gameType === 'threeUpGin'){
+          if(!state.marketLeft && !state.marketRight && state.discardPile.length === 0){
+            endHandDraw();
+            return;
+          }
+        } else if(state.deck.length === 0){
+          endHandDraw();
+          return;
+        }
+        state.phase = 'draw';
+        state.turn = 'ai';
+        render();
+        updateTurnInstruction();
+      }
+    };
+
+    if(state.gameType === 'threeUpGin' && state.pendingMarketRefill){
       render();
-      updateTurnInstruction();
+      refillPendingMarketSlot(finishPlayerDiscard);
+    } else {
+      finishPlayerDiscard();
     }
   });
 }
@@ -1174,10 +1465,10 @@ function handleKnockClick(){
   let discardCard = null;
   if(kInfo.card){
     discardCard = kInfo.card;
-  } else if(state.selectedId){
+  } else if(state.selectedId && state.selectedId !== state.drawnFromDiscardId){
     discardCard = state.playerHand.find(c=>c.id===state.selectedId);
   } else {
-    discardCard = state.playerHand[state.playerHand.length-1];
+    discardCard = state.playerHand.slice().reverse().find(c=>c.id!==state.drawnFromDiscardId);
   }
 
   if(discardCard){
@@ -1187,8 +1478,11 @@ function handleKnockClick(){
       state.discardPile.push(discardCard);
     }
   }
+  state.drawnFromDiscardId = null;
+  state.pendingMarketRefill = null;
 
-  endHandKnock('player', false);
+  const isGin = (state.gameType === 'threeUpGin') ? Boolean(kInfo.isGin) : true;
+  endHandKnock('player', isGin);
 }
 
 function aiWantsUpcard(card, hand){
@@ -1209,23 +1503,26 @@ function aiDecisionOffer(){
     const card = state.upcard;
     state.upcard = null;
     state.aiHand.push(card);
+    if(state.gameType === 'threeUpGin'){
+      state.drawnFromDiscardId = card.id;
+      populateThreeUpMarket();
+    }
     state.discardsNeeded = 1;
 
     setMsg('AI took the upcard: ' + card.rank + card.suit + '!');
     
-    // Slight initial delay before flying so you can visually see the upcard taking place
     later(() => {
-      animateCardFly($('discardStack'), $('opponentHandRow'), null, ()=>{
-        // Pause briefly after animation completes before advancing turn
+      // Pass `card` face-up with slowAI = true so you can clearly see it glide to AI's hand
+      animateCardFly($('discardStack'), $('opponentHandRow'), card, ()=>{
         later(() => {
           state.phase = 'discard';
           state.turn = 'ai';
           state.busy = false;
           render();
           updateTurnInstruction();
-        }, 800);
+        }, 500);
       }, true);
-    }, 600);
+    }, 350);
   } else {
     setMsg('AI passed on the upcard.');
     if(state.offerStage === 'nondealer'){
@@ -1237,7 +1534,13 @@ function aiDecisionOffer(){
       state.upcard = null;
       const nonDealer = state.dealer === 'player' ? 'ai' : 'player';
 
-      if(state.gameType === 'duoGin'){
+      if(state.gameType === 'threeUpGin'){
+        populateThreeUpMarket();
+        state.phase = 'draw';
+        state.turn = nonDealer;
+        render();
+        updateTurnInstruction();
+      } else if(state.gameType === 'duoGin'){
         if(nonDealer === 'ai'){
           if(state.deck.length < 2){ endHandDraw(); return; }
           state.busy = true;
@@ -1253,8 +1556,8 @@ function aiDecisionOffer(){
               state.busy = false;
               render();
               updateTurnInstruction();
-            }, true);
-          }, true);
+            });
+          });
         } else {
           if(state.deck.length < 2){ endHandDraw(); return; }
           state.busy = true;
@@ -1287,6 +1590,68 @@ function aiDecisionOffer(){
 
 function aiTurnDraw(){
   if(state.phase !== 'draw' || state.turn !== 'ai') return;
+
+  if(state.gameType === 'threeUpGin'){
+    const options = [];
+    if(state.marketLeft){
+      const bestAfter = bestThreeUpKnock(state.aiHand.concat(state.marketLeft), null);
+      options.push({ type: 'left', card: state.marketLeft, pts: bestAfter.pts });
+    }
+    if(state.marketRight){
+      const bestAfter = bestThreeUpKnock(state.aiHand.concat(state.marketRight), null);
+      options.push({ type: 'right', card: state.marketRight, pts: bestAfter.pts });
+    }
+    if(state.discardPile.length > 0){
+      const topD = state.discardPile[state.discardPile.length - 1];
+      const bestAfter = bestThreeUpKnock(state.aiHand.concat(topD), topD.id);
+      options.push({ type: 'discard', card: topD, pts: bestAfter.pts });
+    }
+
+    if(options.length === 0){ endHandDraw(); return; }
+
+    options.sort((a,b)=>a.pts - b.pts);
+    let chosen = options[0];
+    if(state.aiLevel === 'beginner' && options.length > 1 && Math.random() < 0.45){
+      chosen = options[Math.floor(Math.random() * options.length)];
+    }
+
+    state.busy = true;
+    state.discardsNeeded = 1;
+
+    if(chosen.type === 'discard'){
+      const card = state.discardPile.pop();
+      state.aiHand.push(card);
+      state.drawnFromDiscardId = card.id;
+      setMsg('AI took ' + card.rank + card.suit + ' from Discard.');
+      // Slowly glide the face-up card to AI's hand so player can track it
+      animateCardFly($('discardStack'), $('opponentHandRow'), card, ()=>{
+        state.phase = 'discard';
+        state.busy = false;
+        render();
+        updateTurnInstruction();
+      }, true);
+    } else {
+      const side = chosen.type;
+      const card = side === 'left' ? state.marketLeft : state.marketRight;
+      if(side === 'left') state.marketLeft = null;
+      else state.marketRight = null;
+      // Replenish Market slot ONLY AFTER AI discards
+      state.pendingMarketRefill = side;
+      state.aiHand.push(card);
+      state.drawnFromDiscardId = null;
+      setMsg('AI took ' + card.rank + card.suit + ' from Market ' + (side === 'left' ? 'L' : 'R') + '.');
+      const fromEl = side === 'left' ? $('marketLeftCard') : $('marketRightCard');
+      render();
+      // Slowly glide the face-up card to AI's hand so player can track it
+      animateCardFly(fromEl, $('opponentHandRow'), card, ()=>{
+        state.phase = 'discard';
+        state.busy = false;
+        render();
+        updateTurnInstruction();
+      }, true);
+    }
+    return;
+  }
   
   if(state.gameType === 'duoGin'){
     let bestPickIdx = -1;
@@ -1314,12 +1679,12 @@ function aiTurnDraw(){
       const card = state.discardPile.splice(bestPickIdx, 1)[0];
       state.aiHand.push(card);
       state.discardsNeeded = 1;
-      setMsg('AI took a discard card.');
+      setMsg('AI took ' + card.rank + card.suit + ' from discard.');
       
       const stack = $('discardStack');
       const targetEl = stack.querySelector(bestPickIdx === state.discardPile.length ? '.card-top' : '.card-second') || stack;
       
-      animateCardFly(targetEl, $('opponentHandRow'), null, ()=>{
+      animateCardFly(targetEl, $('opponentHandRow'), card, ()=>{
         state.phase = 'discard';
         state.busy = false;
         render();
@@ -1340,8 +1705,8 @@ function aiTurnDraw(){
           state.busy = false;
           render();
           updateTurnInstruction();
-        }, true);
-      }, true);
+        });
+      });
     }
 
   } else {
@@ -1358,8 +1723,8 @@ function aiTurnDraw(){
       const card = state.discardPile.pop();
       state.aiHand.push(card);
       state.discardsNeeded = 1;
-      setMsg('AI drew from discard.');
-      animateCardFly($('discardStack'), $('opponentHandRow'), null, ()=>{
+      setMsg('AI drew ' + card.rank + card.suit + ' from discard.');
+      animateCardFly($('discardStack'), $('opponentHandRow'), card, ()=>{
         state.phase = 'discard';
         state.busy = false;
         render();
@@ -1375,7 +1740,7 @@ function aiTurnDraw(){
         state.busy = false;
         render();
         updateTurnInstruction();
-      }, true);
+      });
     }
   }
 }
@@ -1384,6 +1749,53 @@ function aiTurnDiscard(){
   if(state.phase !== 'discard' || state.turn !== 'ai') return;
 
   state.busy = true;
+
+  if(state.gameType === 'threeUpGin'){
+    const bk = bestThreeUpKnock(state.aiHand, state.drawnFromDiscardId);
+    const cardToDisc = bk ? bk.card : state.aiHand.find(c=>c.id!==state.drawnFromDiscardId);
+    const idx = state.aiHand.findIndex(c => c.id === cardToDisc.id);
+    if(idx !== -1) state.aiHand.splice(idx, 1);
+    state.discardPile.push(cardToDisc);
+    state.drawnFromDiscardId = null;
+    state.discardsNeeded--;
+
+    setMsg('AI discarded ' + cardToDisc.rank + cardToDisc.suit + '.');
+    animateCardFly($('opponentHandRow'), $('discardStack'), cardToDisc, ()=>{
+      const finishAIDiscard = () => {
+        state.busy = false;
+
+        const aiAn = analyzeHand(state.aiHand, 'pts');
+        const aiPts = aiAn.deadwood.reduce((s,c)=>s+cardPts(c),0);
+        if(aiAn.deadwood.length === 0){
+          endHandKnock('ai', true);
+          return;
+        }
+        const shouldKnock = aiPts <= 5 && (state.aiLevel === 'pro' ? aiPts <= 3 : true);
+        if(shouldKnock){
+          endHandKnock('ai', false);
+          return;
+        }
+
+        if(!state.marketLeft && !state.marketRight && state.discardPile.length === 0){
+          endHandDraw();
+          return;
+        }
+        state.phase = 'draw';
+        state.turn = 'player';
+        render();
+        updateTurnInstruction();
+      };
+
+      if(state.pendingMarketRefill){
+        render();
+        refillPendingMarketSlot(finishAIDiscard);
+      } else {
+        finishAIDiscard();
+      }
+    });
+    return;
+  }
+
   const aiK = knockAllowed(state.aiHand);
   let cardToDisc = null;
 
@@ -1405,7 +1817,7 @@ function aiTurnDiscard(){
 
     const finalAIK = knockAllowed(state.aiHand);
     if(finalAIK && finalAIK.cnt === 0){
-      endHandKnock('ai', false);
+      endHandKnock('ai', true);
       return;
     }
 
@@ -1422,13 +1834,71 @@ function aiTurnDiscard(){
       render();
       updateTurnInstruction();
     }
-  }, true);
+  });
 }
 
-function endHandKnock(winner, isBigGin){
+function endHandKnock(winner, isGin){
   state.handOver = true;
   state.reveal = true;
   if(state.timerId){ clearInterval(state.timerId); state.timerId = null; }
+
+  if(state.gameType === 'threeUpGin'){
+    const pAn = analyzeHand(state.playerHand, 'pts');
+    const aAn = analyzeHand(state.aiHand, 'pts');
+
+    if(isGin){
+      if(winner === 'player'){
+        const aiDwPts = aAn.deadwood.reduce((s,c)=>s+cardPts(c),0);
+        const total = aiDwPts + state.ginBonus;
+        state.playerScore += total;
+        showResultModal('You Got Gin!', `AI had ${aiDwPts} deadwood pts + ${state.ginBonus} Gin bonus = ${total} pts.`);
+      } else {
+        const pDwPts = pAn.deadwood.reduce((s,c)=>s+cardPts(c),0);
+        const total = pDwPts + state.ginBonus;
+        state.aiScore += total;
+        showResultModal('AI Got Gin!', `You had ${pDwPts} deadwood pts + ${state.ginBonus} Gin bonus = ${total} pts.`);
+      }
+      render();
+      return;
+    }
+
+    // Knock with automatic Lay Offs & Undercut check
+    if(winner === 'player'){
+      const knockerPts = pAn.deadwood.reduce((s,c)=>s+cardPts(c),0);
+      const layOffRes = layOffDeadwood(pAn.melds, aAn.deadwood);
+      const defPts = layOffRes.remaining.reduce((s,c)=>s+cardPts(c),0);
+      const layNote = layOffRes.laidOff.length > 0 ? ` (AI laid off ${layOffRes.laidOff.length} card${layOffRes.laidOff.length>1?'s':''})` : '';
+
+      if(defPts <= knockerPts){
+        const diff = knockerPts - defPts;
+        const total = diff + state.undercutBonus;
+        state.aiScore += total;
+        showResultModal('AI Undercut You!', `You knocked with ${knockerPts} pts. AI had ${defPts} pts${layNote}. AI gets ${diff} + ${state.undercutBonus} Undercut bonus = ${total} pts.`);
+      } else {
+        const diff = defPts - knockerPts;
+        state.playerScore += diff;
+        showResultModal('You Knocked & Won!', `Your deadwood: ${knockerPts} pts. AI deadwood: ${defPts} pts${layNote}. You scored ${diff} pts.`);
+      }
+    } else {
+      const knockerPts = aAn.deadwood.reduce((s,c)=>s+cardPts(c),0);
+      const layOffRes = layOffDeadwood(aAn.melds, pAn.deadwood);
+      const defPts = layOffRes.remaining.reduce((s,c)=>s+cardPts(c),0);
+      const layNote = layOffRes.laidOff.length > 0 ? ` (You laid off ${layOffRes.laidOff.length} card${layOffRes.laidOff.length>1?'s':''})` : '';
+
+      if(defPts <= knockerPts){
+        const diff = knockerPts - defPts;
+        const total = diff + state.undercutBonus;
+        state.playerScore += total;
+        showResultModal('You Undercut AI!', `AI knocked with ${knockerPts} pts. Your deadwood: ${defPts} pts${layNote}. You get ${diff} + ${state.undercutBonus} Undercut bonus = ${total} pts.`);
+      } else {
+        const diff = defPts - knockerPts;
+        state.aiScore += diff;
+        showResultModal('AI Knocked & Won!', `AI deadwood: ${knockerPts} pts. Your deadwood: ${defPts} pts${layNote}. AI scored ${diff} pts.`);
+      }
+    }
+    render();
+    return;
+  }
 
   let pts = 0;
   if(winner === 'player'){
@@ -1453,22 +1923,23 @@ function endHandDraw(){
   state.reveal = true;
   if(state.timerId){ clearInterval(state.timerId); state.timerId = null; }
   
-  if (state.gameType === 'duoGin') {
-    const pAn = analyzeHand(state.playerHand, 'count');
-    const aAn = analyzeHand(state.aiHand, 'count');
+  if (state.gameType === 'duoGin' || state.gameType === 'threeUpGin') {
+    const mode = state.gameType === 'threeUpGin' ? 'pts' : 'count';
+    const pAn = analyzeHand(state.playerHand, mode);
+    const aAn = analyzeHand(state.aiHand, mode);
     const pPts = pAn.deadwood.reduce((s,c)=>s+cardPts(c),0);
     const aPts = aAn.deadwood.reduce((s,c)=>s+cardPts(c),0);
     
     if (pPts < aPts) {
       const diff = aPts - pPts;
       state.playerScore += diff;
-      showResultModal('Deck Empty! You Win', `You had ${pPts} deadwood. AI had ${aPts}. You score ${diff} pts.`);
+      showResultModal('Cards Exhausted! You Win', `You had ${pPts} deadwood. AI had ${aPts}. You score ${diff} pts.`);
     } else if (aPts < pPts) {
       const diff = pPts - aPts;
       state.aiScore += diff;
-      showResultModal('Deck Empty! AI Wins', `AI had ${aPts} deadwood. You had ${pPts}. AI scores ${diff} pts.`);
+      showResultModal('Cards Exhausted! AI Wins', `AI had ${aPts} deadwood. You had ${pPts}. AI scores ${diff} pts.`);
     } else {
-      showResultModal('Deck Empty! Tie', `Both players had ${pPts} deadwood. 0 points awarded.`);
+      showResultModal('Cards Exhausted! Tie', `Both players had ${pPts} deadwood. 0 points awarded.`);
     }
   } else {
     showResultModal('Stock Exhausted', 'The stock pile is empty. This hand is a draw with 0 points awarded.');
@@ -1481,10 +1952,9 @@ function showResultModal(title, sub){
   $('resTitle').textContent = title;
   $('resSub').textContent = sub;
 
+  const mode = state.gameType === 'threeUpGin' ? 'pts' : 'count';
   const rAI = $('resAI'); rAI.innerHTML = '';
-  const aiAn = analyzeHand(state.aiHand, 'count');
-  const aiMeldedIds = new Set();
-  aiAn.melds.forEach(m=>m.forEach(c=>aiMeldedIds.add(c.id)));
+  const aiAn = analyzeHand(state.aiHand, mode);
 
   aiAn.melds.forEach(m=>{
     const g = document.createElement('div'); g.className = 'res-group meld';
@@ -1498,9 +1968,7 @@ function showResultModal(title, sub){
   }
 
   const rYou = $('resYou'); rYou.innerHTML = '';
-  const pAn = analyzeHand(state.playerHand, 'count');
-  const pMeldedIds = new Set();
-  pAn.melds.forEach(m=>m.forEach(c=>pMeldedIds.add(c.id)));
+  const pAn = analyzeHand(state.playerHand, mode);
 
   pAn.melds.forEach(m=>{
     const g = document.createElement('div'); g.className = 'res-group meld';
@@ -1567,7 +2035,6 @@ function attachCardDrag(el, cid){
         render();
       }
     } else {
-      const pr = $('playerHandRow');
       const t = e.changedTouches[0];
       const target = document.elementFromPoint(t.clientX, t.clientY);
       const targetCardEl = target ? target.closest('.card') : null;
@@ -1585,15 +2052,27 @@ function attachCardDrag(el, cid){
   });
 }
 
+function updateSettingsUIForGameType(){
+  const deckRow = $('deckSizeRow');
+  if(state.gameType === 'threeUpGin'){
+    $('setDeckSize').value = '52';
+    state.deckSize = '52';
+    deckRow.classList.add('disabled');
+  } else {
+    deckRow.classList.remove('disabled');
+  }
+}
+
 function initApp(){
   $('deckCard').addEventListener('click', handleDrawStock);
 
-  // Directly handle discard stack & upcard clicks
+  $('marketLeftWrap').addEventListener('click', ()=>handleDrawMarket('left'));
+  $('marketRightWrap').addEventListener('click', ()=>handleDrawMarket('right'));
+
   const discardStackEl = $('discardStack');
   const handleDiscardClick = (e) => {
     if(state.handOver || state.busy) return;
     
-    // Allow taking the initial upcard during the offer phase
     if(state.phase === 'offer'){
       if(offerStagePlayer() === 'player'){
         handleTakeUpcard();
@@ -1617,8 +2096,7 @@ function initApp(){
   };
 
   discardStackEl.addEventListener('click', handleDiscardClick);
-  $('discardPileWrap').addEventListener('click', (e) => {
-    // Fallback click handler if wrapper is tapped directly
+  $('discardPileWrap').addEventListener('click', () => {
     if(state.phase === 'offer' && offerStagePlayer() === 'player'){
       handleTakeUpcard();
     }
@@ -1669,6 +2147,7 @@ function initApp(){
       const gtype = card.dataset.gtype;
       state.gameType = gtype;
       $('setGameType').value = gtype;
+      updateSettingsUIForGameType();
     });
   });
 
@@ -1699,6 +2178,7 @@ function initApp(){
       if (c.dataset.gtype === state.gameType) c.classList.add('selected');
       else c.classList.remove('selected');
     });
+    updateSettingsUIForGameType();
   });
 
   $('aiLevelSelect').addEventListener('change', (e) => {
@@ -1709,7 +2189,7 @@ function initApp(){
     state.timerSeconds = parseInt(e.target.value, 10) || 0;
   });
 
-  // Slider bindings for Target Score, Gin Bonus, and Big Gin Bonus
+  // Slider bindings for Target Score, Gin Bonus, Big Gin Bonus, and Undercut Bonus
   const targetInput = $('targetScoreInput');
   const targetVal = $('targetScoreVal');
   if(targetInput && targetVal){
@@ -1737,6 +2217,15 @@ function initApp(){
     });
   }
 
+  const undercutInput = $('undercutInput');
+  const undercutVal = $('undercutVal');
+  if(undercutInput && undercutVal){
+    undercutInput.addEventListener('input', (e) => {
+      state.undercutBonus = parseInt(e.target.value, 10);
+      undercutVal.textContent = state.undercutBonus;
+    });
+  }
+
   $('resetRecordBtn').addEventListener('click', () => {
     customConfirm('Reset all saved records?', () => {
       resetAllRecord();
@@ -1745,6 +2234,7 @@ function initApp(){
 
   loadRecord();
   updateRecordUI();
+  updateSettingsUIForGameType();
   render();
 }
 
